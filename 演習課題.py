@@ -29,13 +29,40 @@ plt.scatter(X, Y, label='data set')
 plt.legend()
 plt.show()
 
+import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import PolynomialFeatures
 
-# 画像の読み込み
-img = mpimg.imread('sample.png')
+# 1. データの用意（資料 In [1] より）
+X = np.array([[0.0], [2.0], [3.9], [4.0]])
+Y = np.array([4.0, 0.0, 3.0, 2.0])
 
-# 画像の表示
-plt.imshow(img)
-plt.axis('off') # 目盛り（座標軸）を消す
-plt.show()      # ウィンドウを表示
+# 2. 次数の設定（資料に合わせて degree=2 にします）
+poly = PolynomialFeatures(degree=2)
+X_poly = poly.fit_transform(X)
+
+# 描画用の細かいX軸データ（資料 In [2] より）
+samples_x = np.arange(0, 4.1, 0.1)
+samples_x_poly = poly.fit_transform(samples_x.reshape(-1, 1))
+
+# 3. グラフの準備
+plt.figure(figsize=(8, 5))
+alphas = [0, 0.1, 0.5, 1.0, 10.0]
+
+# 4. 5パターンのalphaでループ処理
+for a in alphas:
+    # 各alphaで学習
+    clf = Ridge(alpha=a)
+    clf.fit(X_poly, Y)
+    
+    # 予測
+    samples_y = clf.predict(samples_x_poly)
+    
+    # 描画（ラベルに alpha の値を設定）
+    plt.plot(samples_x, samples_y, label=f'alpha = {a}')
+
+# 5. 仕上げ（資料の Out [3] と同じ見た目にする）
+plt.scatter(X, Y, label='data set', zorder=5) # 元のデータ点
+plt.legend() # 凡例を表示
+plt.show()   # 画面に表示
