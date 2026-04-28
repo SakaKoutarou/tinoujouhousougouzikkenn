@@ -16,3 +16,5 @@ model.fit(X,Y)
 print(model.theta)
 
 print(model.predict(X))
+
+print(model.score(X,Y))
