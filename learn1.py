@@ -51,3 +51,44 @@ print(y_pred)
 # 3. 比較のために実際の観測値（答え）も表示してみる
 print("\n--- 参考：実際の観測値（答え） ---")
 print(y_test)
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# --- 演習1.11：モデルの可視化 ---
+
+# 1. グラフ用のデータ作成
+# 定義域 -1 <= x <= 1 を細かく分割したデータを作成（滑らかな線を描くため）
+x_line = np.linspace(-1, 1, 100).reshape(-1, 1)
+
+# 真の関数（dataset1で定義した sin(x * pi) * 10 と同じ式）
+y_true = np.sin(x_line * np.pi) * 10
+
+# AIモデルによる予測値（直線）
+y_model = model.predict(x_line)
+
+# 2. プロットの作成
+plt.figure(figsize=(10, 6))
+
+# 演習1.3：観測値（実際のデータ点）を散布図で描画
+plt.scatter(df['観測点'], df['観測値'], color='blue', alpha=0.5, label='Observations')
+
+# 演習1.1：真の関数を点線で描画
+plt.plot(x_line, y_true, color='green', linestyle='--', label='True Function (sin)')
+
+# 演習1.9：構築したモデル（直線）を実線で描画
+plt.plot(x_line, y_model, color='red', linewidth=2, label='Linear Regression Model')
+
+# 3. グラフの設定と保存
+plt.title('Model Visualization (Linear Regression)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend() # 凡例を表示
+plt.grid(True)
+
+# 画像として保存
+plt.savefig('ex1.10.png')
+print("\n--- 演習1.11：グラフを ex1.10.png として保存しました ---")
+
+# 画面に表示
+plt.show()
